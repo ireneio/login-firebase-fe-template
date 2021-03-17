@@ -1,4 +1,4 @@
-# nuxt-ts-docker-template
+# login-firebase-fe-template
 
 ## Stack
 

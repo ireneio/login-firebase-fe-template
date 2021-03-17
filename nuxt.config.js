@@ -37,8 +37,14 @@ export default {
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
   env: {
-    API_URL: process.env.NUXT_ENV_API_URL || 'http://localhost:8080',
+    API_URL: process.env.NUXT_ENV_API_URL || 'http://localhost:8081',
     BLOB_URL: process.env.NUXT_ENV_BLOB_URL || 'http://localhost:3000',
     TIMEOUT_LIMIT: process.env.NUXT_ENV_TIMEOUT_LIMIT,
+    FB_APIKEY: process.env.NUXT_ENV_FB_APIKEY || 'AIzaSyDzwbn-tD8Ug4SmhqM5Nj5rDAHbqtOcpfk',
+    FB_AUTHDOMAIN: process.env.NUXT_ENV_FB_AUTHDOMAIN || 'auth-service-template.firebaseapp.com',
+    FB_DBURL: process.env.NUXT_ENV_FB_DBURL || '',
+    FB_PROJECTID: process.env.NUXT_ENV_FB_PROJECTID || 'auth-service-template',
+    FB_APPID: process.env.NUXT_ENV_FB_APPID || '1:757088030425:web:5bf05537026741bc4ff8c8'
   },
+  ssr: false
 }

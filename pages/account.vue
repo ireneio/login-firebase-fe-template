@@ -55,8 +55,11 @@
         </div>
       </div>
       <div class="col" style="margin-top:8px;">
-        <button class="btn btn--primary" style="margin-right:8px;" @click="handleSignOut">SignOut</button>
-        <button class="btn btn--secondary"  style="margin-right:8px;" @click="handleUpdatePw">UpdatePw</button>
+        <button class="btn btn--primary" style="margin-right:8px;" @click="handleRegister('local')">Register</button>
+        <button class="btn btn--warning" style="margin-right:8px;" @click="handleSignIn('local')">Sign In</button>
+        <button class="btn btn--secondary" style="margin-right:8px;" @click="handleSignIn('google')">Sign In With Google</button>
+        <!-- <button class="btn btn--primary" style="margin-right:8px;" @click="handleSignOut">SignOut</button>
+        <button class="btn btn--secondary"  style="margin-right:8px;" @click="handleUpdatePw">UpdatePw</button> -->
       </div>
     </div>
   </div>
@@ -65,7 +68,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import Logo from '~/components/Logo.vue'
-import { dataStore, authStore } from '~/store/index'
+import { dataStore, firebaseStore, authStore } from '~/store/index'
 import { $axios } from '~/utils/api'
 import { Firebase } from '~/utils/firebase'
 import { Token } from '~/utils/token'
@@ -73,9 +76,10 @@ import { Token } from '~/utils/token'
 @Component({
   components: {
     Logo,
-  }
+  },
+  layout: 'signIn'
 })
-export default class Index extends Vue {
+export default class Account extends Vue {
   private axiosIsWorking: any = ''
 
   private get storeData(): string {
@@ -91,15 +95,30 @@ export default class Index extends Vue {
     password: ''
   }
 
-  private async handleSignOut(): Promise<void> {
-    await Firebase.signOut()
-    Token.removeValue()
-    authStore.setIsSignedIn(false)
-    this.$router.push('/account')
+  private async handleSignIn(type: string): Promise<void> {
+    const token = await Firebase.signIn(this.signInForm, type)
+    if(type !== 'local') {
+      await this.handleRegister(type)
+      this.$router.push('/')
+    } else {
+      if(token) await firebaseStore.signIn(token)
+      this.$router.push('/')
+    }
   }
 
-  private async handleUpdatePw(): Promise<void> {
-    await Firebase.updatePw(this.signInForm)
+  private async handleRegister(type: string): Promise<void> {
+    const registerResult = await Firebase.register(this.signInForm)
+    if(!registerResult) return
+    const token = await Firebase.signIn(this.signInForm, type)
+    try {
+      if(token) {
+        await $axios.post('/auth/firebase/', { token })
+        Token.setValue(token)
+        this.$router.push('/')
+      }
+    } catch (e) {
+      console.log('Error: ' + e.message)
+    }
   }
 
   private async created(): Promise<void> {

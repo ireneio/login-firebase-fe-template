@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
+    "dev": "cross-env nuxt-ts",
     "build": "cross-env nuxt-ts build",
     "build:bind": "cross-env NUXT_PORT=3000 NUXT_HOST=0.0.0.0 nuxt-ts build",
     "start": "cross-env nuxt-ts start",
@@ -25,6 +25,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.3",
+    "firebase": "^8.3.0",
     "nuxt": "^2.14.6",
     "nuxt-property-decorator": "^2.8.3"
   },
@@ -32,6 +33,7 @@
     "@nuxt/types": "^2.14.6",
     "@nuxt/typescript-build": "^2.0.3",
     "@vue/test-utils": "^1.1.0",
+    "@types/firebase": "^3.2.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^26.5.0",
     "jest": "^26.5.0",
